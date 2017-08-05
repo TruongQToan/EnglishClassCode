@@ -57,6 +57,6 @@ if __name__ == "__main__":
             list_of_args = ["python3", "overviewglossika.py",
                 start, end,
                 '-f', num_files_per_group,
-                '-t', type_output]
+                '-t', type_output, '-n', name]
             if not to_mp3 == '': list_of_args.append(to_mp3)
             subprocess.call(list_of_args)
