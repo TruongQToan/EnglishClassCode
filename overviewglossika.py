@@ -6,8 +6,8 @@ from shutil import rmtree
 from convert2mp3 import convert_file_2_mp3
 from generator import generate
 from create_silence import create_silence_from_file
-from utils import makedir, convert_mp3, generate_glossika, make_track, get_num_files
-from config import GLOSSIKA_EN, GLOSSIKA_OVERVIEW
+from utils import makedir, convert_mp3, generate_glossika, make_track, get_num_files, sub_directory
+from config import GLOSSIKA_EN, GLOSSIKA_OVERVIEW, OUTPUT_ALL
 
 def create_overview_en(files, start, end, to_mp3):
     makedir('outputSE')
@@ -18,19 +18,20 @@ def create_overview_en(files, start, end, to_mp3):
         create_silence_from_file(f, silence_file)
         result += [GLOSSIKA_EN + f.split('/')[-1], silence_file]
 
-    name = GLOSSIKA_OVERVIEW +'%04d_%04d_OverviewEN.wav' % (start, end)
-    makedir(GLOSSIKA_OVERVIEW)
+    dir_name = OUTPUT_ALL + '(wav)/' + sub_directory()
+    name = dir_name +'/%04d_%04d_OverviewEN.wav' % (start, end)
+    makedir(dir_name)
     make_track(result, name)
-    folder_name = GLOSSIKA_OVERVIEW
-    convert_mp3(to_mp3, name, folder_name.replace('wav', 'mp3'), artist, album)
+    convert_mp3(to_mp3, name, dir_name.replace('wav', 'mp3'), artist, album)
 
 def create_overview_0(start, end, to_mp3):
     result = ['outputB/FL-%04d-B%s' % (i, '.wav') for i in range(start, end + 1)]
-    name = GLOSSIKA_OVERVIEW + '%04d_%04d_Overview0.wav' % (start, end)
-    makedir(GLOSSIKA_OVERVIEW)
+    dir_name = OUTPUT_ALL + '(wav)/' + sub_directory()
+    name = dir_name + '/%04d_%04d_Overview0.wav' % (start, end)
+    makedir(dir_name)
     make_track(result, name)
     folder_name = GLOSSIKA_OVERVIEW
-    convert_mp3(to_mp3, name, folder_name.replace('wav', 'mp3'), artist, album)
+    convert_mp3(to_mp3, name, dir_name.replace('wav', 'mp3'), artist, album)
 
 def create_overview(files, start, end, num_files_per_group=8, type_output='B', to_mp3=False,
     artist='Glossika', album='Glossika Training'):
@@ -47,11 +48,11 @@ def create_overview(files, start, end, num_files_per_group=8, type_output='B', t
         start = start + num_files_per_group
 
     type_num = '1' if type_output == 'B' else '2'
-    name = GLOSSIKA_OVERVIEW + ('/%04d_%04d_Overview' % (old_start, old_end)) + type_num + '.wav'
-    makedir(GLOSSIKA_OVERVIEW)
+    dir_name = OUTPUT_ALL + '(wav)/' + sub_directory()
+    name = dir_name + ('/%04d_%04d_Overview' % (old_start, old_end)) + type_num + '.wav'
+    makedir(dir_name)
     make_track(result, name)
-    folder_name = GLOSSIKA_OVERVIEW
-    convert_mp3(to_mp3, name, folder_name.replace('wav', 'mp3'), artist, album)
+    convert_mp3(to_mp3, name, dir_name.replace('wav', 'mp3'), artist, album)
 
     print ('Shuffle Files: Done')
 

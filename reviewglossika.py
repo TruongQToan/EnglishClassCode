@@ -5,7 +5,8 @@ from shutil import rmtree
 import eyed3
 import argparse
 import sys
-from utils import shuffle_track, convert_mp3, print_log, get_name, makedir, generate_glossika, make_track, get_num_files
+from utils import shuffle_track, convert_mp3, print_log, get_name, makedir, generate_glossika, make_track, get_num_files, sub_directory
+from config import OUTPUT_ALL
 
 def create_review(files, start, end, num_plays, num_files_per_group, log=False,
     log_tracks=0, num_copies=1, to_mp3=False, artist='Glossika', album='Glossika Training', name=None):
@@ -30,16 +31,17 @@ def create_review(files, start, end, num_plays, num_files_per_group, log=False,
 
     # Shuffle files
 
-    prefix = '%04d_%04d' % (start, end)
-    if name is not None:
+    prefix = 'Review_%04d_%04d' % (start, end)
+    if name is not None and not name == '':
         prefix = name
 
     for copies in range(int(num_copies)):
         result = shuffle_track(files, num_plays, num_files_per_group)
-        makedir('Review(wav)')
-        name = get_name('Review', prefix , num_plays)
+        dir_name = OUTPUT_ALL + '(wav)/' + sub_directory()
+        makedir(dir_name)
+        name = get_name(dir_name, prefix , num_plays)
         make_track(result, name)
-        convert_mp3(to_mp3, name, 'Review(mp3)', artist, album)
+        convert_mp3(to_mp3, name, dir_name.replace("wav", "mp3"), artist, album)
         print_log(log, log_tracks, result)
 
     print ('Shuffle Files: Done')
@@ -54,7 +56,8 @@ def get_files(lists, shuffled):
         end = int(lists[i].split('-')[1])
         if end > max_end: max_end = end
         files += generate_glossika(start, end, shuffled=shuffled)
-        if shuffled == 'all': shuffle(files)
+
+    if shuffled == 'all': shuffle(files)
     return (files, min_start, max_end)
 
 if __name__ == "__main__":

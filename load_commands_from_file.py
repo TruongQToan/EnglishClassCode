@@ -21,7 +21,7 @@ if __name__ == "__main__":
         name = encode(sheet.cell(row, 5).value).strip() if sheet.cell(row, 5) else ''
         shuffled = encode(sheet.cell(row, 6).value).strip()
         list_of_tracks = encode(sheet.cell(row, 7).value).strip()
-        type_overview = encode(sheet.cell(row, 8).value).strip()
+        type_output = encode(sheet.cell(row, 8).value).strip() if sheet.cell(row, 8) else ''
 
         if cmd == "reviewglossika.py":
             list_of_args = ["python3", "reviewglossika.py",
@@ -35,6 +35,7 @@ if __name__ == "__main__":
             for u in list_of_tracks.split(' '):
                 list_of_args.append(u)
             if not to_mp3 == '': list_of_args.append(to_mp3)
+            if not type_output == '': list_of_args.append(type_output)
             subprocess.call(list_of_args)
         elif cmd == "mixaccent.py" or cmd == "mixgrammar.py":
             list_of_args = ["python3", cmd,
@@ -56,6 +57,6 @@ if __name__ == "__main__":
             list_of_args = ["python3", "overviewglossika.py",
                 start, end,
                 '-f', num_files_per_group,
-                '-t', type_overview]
+                '-t', type_output]
             if not to_mp3 == '': list_of_args.append(to_mp3)
             subprocess.call(list_of_args)

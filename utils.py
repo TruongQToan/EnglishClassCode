@@ -96,12 +96,12 @@ def print_log(log, log_tracks, list_of_files):
 
 def get_name(output_folder, prefix, num_plays):
     name_id = 1
-    name = './' + output_folder + '(wav)/' + prefix + '_' + '%1ds-%1d.wav' % (num_plays, name_id)
+    name = './' + output_folder + '/' + prefix + '_' + '%1ds-%1d.wav' % (num_plays, name_id)
     max_id = None
     while True:
         if os.path.exists(name):
             name_id += 1
-            name = './' + output_folder + '(wav)/' + prefix + '_' + '%1ds-%1d.wav' % (num_plays, name_id)
+            name = './' + output_folder + '/' + prefix + '_' + '%1ds-%1d.wav' % (num_plays, name_id)
         else: break
     return name
 
@@ -109,3 +109,7 @@ def make_track(result, name):
     sox = get_sox()
     list_of_argvs = [sox, ] + result + [name,]
     subprocess.call(list_of_argvs)
+
+def sub_directory():
+    from time import gmtime, strftime
+    return strftime("%Y-%d-%m", gmtime())
