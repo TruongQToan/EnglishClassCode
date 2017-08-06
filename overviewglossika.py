@@ -9,7 +9,7 @@ from create_silence import create_silence_from_file
 from utils import makedir, convert_mp3, generate_glossika, make_track, get_num_files, sub_directory, get_name
 from config import GLOSSIKA_EN, GLOSSIKA_OVERVIEW, OUTPUT_ALL
 
-def _get_name(prefix, type_output, dir_name):
+def _get_name(prefix, type_output, dir_name, old_start=-1, old_end=-1):
     name = ''
     if prefix == '' or prefix is None:
         if type_output == 'en':
@@ -62,7 +62,7 @@ def create_overview(files, start, end, num_files_per_group=8, type_output='B', t
 
     type_num = '1' if type_output == 'B' else '2'
     dir_name = OUTPUT_ALL + '(wav)/' + sub_directory()
-    name = _get_name(prefix, type_num, dir_name)
+    name = _get_name(prefix, type_num, dir_name, old_start, old_end)
     makedir(dir_name)
     make_track(result, name)
     convert_mp3(to_mp3, name, dir_name.replace('wav', 'mp3'), artist, album)
